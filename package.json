@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/nasawz/yingyan#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.112",
     "@types/node": "^10.5.2",
     "concurrently": "^3.6.0",
     "jspm-hmr": "^1.0.0-rc7",
@@ -34,5 +35,10 @@
     "rollup-plugin-uglify": "^4.0.0",
     "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.18.0",
+    "lodash": "^4.17.10"
   }
 }

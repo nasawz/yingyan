@@ -44,13 +44,13 @@ function createBundleConfig(dest, { output, plugins }) {
       ...output
     },
     name: 'Y',
-    // external: ['axios'],
+    external: ['axios'],
     exports: 'named',
     treeshake: true,
-    plugins
-    // globals: {
-    //   axios: 'axios'
-    // }
+    plugins,
+    globals: {
+      axios: 'axios'
+    }
   };
 }
 

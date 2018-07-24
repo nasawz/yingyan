@@ -1,5 +1,9 @@
 import { h, render, Component } from 'preact';
 import cxs from 'cxs';
+import config from './app.json';
+import { customEvent } from './helper/customEvent';
+import { YY_EVENT } from './helper/constants';
+declare const window: any;
 
 class Clock extends Component {
   timer: any;
@@ -28,11 +32,49 @@ class Clock extends Component {
     return <span className={clockStyle}>{time}</span>;
   }
 }
-cxs.prefix('_app-a_');
+let _conatiner: any;
+class Conatiner extends Component<{}, { r: any }> {
+  constructor() {
+    super();
+    _conatiner = this;
+    this.state = {
+      r: true
+    };
+  }
+  render() {
+    if (this.state.r) {
+      return (
+        <div>
+          <Clock />
+        </div>
+      );
+    } else {
+      return <div />;
+    }
+  }
+}
+
+cxs.prefix(`_${config.name}_`);
 const clockStyle = cxs({
   padding: '32px',
   backgroundColor: 'tomato'
 });
 
-// render an instance of Clock into <body>:
-render(<Clock />, document.body);
+window.yingyan = window.yingyan || {};
+window.yingyan[config.name] = window.yingyan[config.name] || {};
+let appInstance: any;
+const mount = (name: string, router?: any) => {
+  appInstance = render(
+    <Conatiner />,
+    document.getElementById(`${config.name}@${config.version}`) || document.body
+  );
+  customEvent(YY_EVENT.CHILD_MOUNT, { name: config.name });
+};
+const unmount = (module: any) => {
+  if (appInstance) {
+    _conatiner.setState({ r: false });
+    document.body.removeChild(appInstance);
+    customEvent(YY_EVENT.CHILD_UNMOUNT, { name: config.name });
+  }
+};
+export { mount, unmount };
