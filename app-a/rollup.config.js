@@ -43,7 +43,7 @@ function createBundleConfig(dest, { output, plugins }) {
       format: 'umd',
       ...output
     },
-    name: 'app-a',
+    name: 'yingyan.app-a',
     // external: ['axios'],
     exports: 'named',
     treeshake: true,

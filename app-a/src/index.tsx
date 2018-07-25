@@ -73,7 +73,8 @@ const mount = (name: string, router?: any) => {
 const unmount = (module: any) => {
   if (appInstance) {
     _conatiner.setState({ r: false });
-    document.body.removeChild(appInstance);
+    appInstance.parentNode.removeChild(appInstance);
+    window.yingyan[config.name] = undefined;
     customEvent(YY_EVENT.CHILD_UNMOUNT, { name: config.name });
   }
 };

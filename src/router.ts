@@ -41,11 +41,11 @@ export class YingyanRouter {
   }
 
   public navigate(path: string): void {
-    history.pushState(null, '', path);
+    history.pushState(null, '', `/#${path}`);
   }
 
   private pathMatch(location: Location, path: string): boolean {
-    const loc = location.pathname + location.search;
+    const loc = location.pathname + location.hash;
     return loc.indexOf(path) !== -1;
   }
 }

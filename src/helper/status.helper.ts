@@ -1,4 +1,22 @@
 import { StatusEnum } from '../interface/constants';
+import { getUnloadApps } from '../lifecycles/unload';
+
+function isActive(app: any) {
+  return app.status === StatusEnum.MOUNTED;
+}
+
+function InActive(app: any) {
+  return !isActive(app);
+}
+
+function shouldNotBeActive(app: any) {
+  try {
+    return !app.activeWhen(window.location);
+  } catch (err) {
+    app.status = StatusEnum.SKIP_BECAUSE_BROKEN;
+    throw new Error(err);
+  }
+}
 
 function notSkipped(item: any) {
   return (
@@ -31,10 +49,29 @@ const StatusHelper = {
       .filter(notLoaded)
       .filter(shouldBeActive);
   },
-  getAppsToUnload: () => {},
-  getAppUnloadInfo: (appName: any) => {},
-  getAppsToUnmount: (apps: any) => {},
-  getAppsToMount: (apps: any) => {},
+  getAppsToUnload: () => {
+    const appsToUnload = getUnloadApps();
+    return Object.keys(appsToUnload)
+      .map(appName => appsToUnload[appName].app)
+      .filter(InActive);
+  },
+  getAppUnloadInfo: (appName: any) => {
+    const appsToUnload = getUnloadApps();
+    return appsToUnload[appName];
+  },
+  getAppsToUnmount: (apps: any) => {
+    return apps
+      .filter(notSkipped)
+      .filter(isActive)
+      .filter(shouldNotBeActive);
+  },
+  getAppsToMount: (apps: any) => {
+    return apps
+      .filter(notSkipped)
+      .filter(InActive)
+      .filter(isLoaded)
+      .filter(shouldBeActive);
+  },
   getActiveApps: (apps: any) => {}
 };
 export default StatusHelper;

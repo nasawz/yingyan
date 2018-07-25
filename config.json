@@ -11,7 +11,7 @@
       "parentElement": "",
       "scripts": ["app-a/dist/app-a.js"],
       "styles": [],
-      "prefix": "/",
+      "prefix": "/help",
       "isDefaultPage": true
     }
   ]
