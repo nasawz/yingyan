@@ -1,3 +1,4 @@
+import { StatusEnum } from '../interface/constants';
 declare const window: any;
 
 export function find(arr: any, func: any) {
@@ -31,6 +32,24 @@ export function customEvent(eventName: any, eventArgs?: any) {
   }
 
   window.dispatchEvent(new CustomEvent(eventName, { detail: eventArgs }));
+}
+
+export function navigateAppByName(opts: any): void {
+  let navigateToApp: any;
+  window.apps.map((app: any) => {
+    app.status = StatusEnum.MOUNTED;
+    if (app.name === opts.appName) {
+      app.status = StatusEnum.NOT_LOADED;
+      navigateToApp = app;
+      return app;
+    }
+  });
+
+  if (navigateToApp) {
+    let prefix = navigateToApp.appConfig.prefix;
+    history.pushState(null, '', `/#${prefix}/${opts.router}`);
+    return window.yingyan.instance.reRouter();
+  }
 }
 
 export function hashCode(str: string) {

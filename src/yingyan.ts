@@ -5,7 +5,7 @@ import axios from 'axios';
 import map from 'lodash/map';
 import StatusHelper from './helper/status.helper';
 import { YingyanRouter } from './router';
-import { yyLog, customEvent } from './helper/app.helper';
+import { yyLog, customEvent, navigateAppByName } from './helper/app.helper';
 
 import { toLoadPromise } from './lifecycles/load';
 import { toBootstrapPromise } from './lifecycles/bootstrap';
@@ -42,6 +42,8 @@ class Yingyan {
    */
   registerApp(data: Array<IApp>) {
     map(data, app => {
+      window.yingyan[app.name] = window.yingyan[app.name] || {};
+      window.yingyan[app.name].prefix = app.prefix;
       let container = document.createElement('div');
       container.id = `${app.name}@${app.version}`;
       document.body.appendChild(container);
@@ -57,14 +59,20 @@ class Yingyan {
   start() {
     this.started = true;
     window.addEventListener(YY_EVENT.ROUTING_NAVIGATE, function(event: CustomEvent) {
-      // if (event.detail) {
-      //   navigateAppByName(event.detail)
-      // }
+      if (event.detail) {
+        navigateAppByName(event.detail);
+      }
     });
     this.reRouter();
   }
 
-  reRouter() {
+  createRoutingChangeEvent(eventArguments: any) {
+    // customEvent(YY_EVENT.ROUTING_CHANGE, { app: {}, router: '' });
+    customEvent(YY_EVENT.ROUTING_CHANGE, eventArguments);
+  }
+
+  reRouter(eventArguments?: any) {
+    const self = this;
     async function performAppChanges() {
       customEvent(YY_EVENT.ROUTING_BEFORE);
       const unloadPromises = StatusHelper.getAppsToUnload().map(toUnloadPromise);
@@ -102,12 +110,9 @@ class Yingyan {
 
       await Promise.all(loadThenMountPromises.concat(mountPromises));
 
-      // if (eventArguments) {
-      //   let activeApp = StatusHelper.getActiveApps(apps)[0]
-      //   if (activeApp && activeApp['appConfig']) {
-      //     that.createRoutingChangeEvent(eventArguments, activeApp)
-      //   }
-      // }
+      if (eventArguments) {
+        self.createRoutingChangeEvent(eventArguments);
+      }
     }
     performAppChanges();
   }

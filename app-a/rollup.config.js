@@ -4,6 +4,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import { uglify } from 'rollup-plugin-uglify';
 const packageJSON = require('./package.json');
+import globals from 'rollup-plugin-node-globals';
 
 const licenseText = `/**
  * Copyright (C) ${new Date().getFullYear()} nasawz <nasawz.com>
@@ -32,6 +33,7 @@ const defaultPlugins = [
   typescript({
     typescript: require('typescript')
   }),
+  globals(),
   json()
 ];
 

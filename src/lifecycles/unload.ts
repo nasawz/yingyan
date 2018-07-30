@@ -4,7 +4,7 @@ import { customEvent, yyLog } from '../helper/app.helper';
 
 const appsToUnload: any = {};
 
-export async function toUnloadPromise(app: any, mooaInstance?: any) {
+export async function toUnloadPromise(app: any, yingyanInstance?: any) {
   const unloadInfo = appsToUnload[app.name];
 
   if (app.status === StatusEnum.NOT_LOADED) {

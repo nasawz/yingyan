@@ -1,9 +1,31 @@
+import Router, { route } from 'preact-router';
+import createHashHistory from 'history/createHashHistory';
 import { h, render, Component } from 'preact';
 import cxs from 'cxs';
 import config from './app.json';
 import { customEvent } from './helper/customEvent';
 import { YY_EVENT } from './helper/constants';
+import { navigate } from './helper/navigate';
 declare const window: any;
+
+class Home extends Component {
+  constructor() {
+    super();
+  }
+  clickHandle() {
+    navigate({ name: config.name, prefix: config.prefix, router: '/clock' });
+  }
+  render() {
+    return (
+      <div>
+        My Home
+        <p>
+          <button onClick={this.clickHandle.bind(this)}>click</button>
+        </p>
+      </div>
+    );
+  }
+}
 
 class Clock extends Component {
   timer: any;
@@ -45,7 +67,10 @@ class Conatiner extends Component<{}, { r: any }> {
     if (this.state.r) {
       return (
         <div>
-          <Clock />
+          <Router history={createHashHistory()}>
+            <Home path={window.yingyan[config.name].prefix} />
+            <Clock path={`${window.yingyan[config.name].prefix}/clock`} />
+          </Router>
         </div>
       );
     } else {
@@ -62,13 +87,21 @@ const clockStyle = cxs({
 
 window.yingyan = window.yingyan || {};
 window.yingyan[config.name] = window.yingyan[config.name] || {};
+window.yingyan[config.name].prefix = window.yingyan[config.name].prefix || config.prefix;
+
+let routingChangeHandler: any = (event: CustomEvent) => {
+  if (event.detail.app.name === config.name) {
+    route(`${window.yingyan[config.name].prefix}${event.detail.router}`, true);
+  }
+};
+
 let appInstance: any;
-const mount = (name: string, router?: any) => {
-  appInstance = render(
-    <Conatiner />,
-    document.getElementById(`${config.name}@${config.version}`) || document.body
-  );
+let targetElement: any;
+const mount = () => {
+  targetElement = document.getElementById(`${config.name}@${config.version}`) || document.body;
+  appInstance = render(<Conatiner />, targetElement);
   customEvent(YY_EVENT.CHILD_MOUNT, { name: config.name });
+  window.addEventListener(YY_EVENT.ROUTING_CHANGE, routingChangeHandler);
 };
 const unmount = (module: any) => {
   if (appInstance) {
@@ -76,6 +109,15 @@ const unmount = (module: any) => {
     appInstance.parentNode.removeChild(appInstance);
     window.yingyan[config.name] = undefined;
     customEvent(YY_EVENT.CHILD_UNMOUNT, { name: config.name });
+    window.removeEventListener(YY_EVENT.ROUTING_CHANGE, routingChangeHandler);
   }
 };
+
 export { mount, unmount };
+
+if (!window.yingyan.instance) {
+  mount();
+  if (window.location.hash === '#/') {
+    route(`${config.prefix}`, true);
+  }
+}

@@ -10,6 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "cxs": "^6.2.0",
-    "preact": "^8.2.9"
+    "history": "^4.7.2",
+    "preact": "^8.2.9",
+    "preact-router": "^2.6.1",
+    "react-router-dom": "^4.3.1"
+  },
+  "devDependencies": {
+    "rollup-plugin-node-globals": "^1.2.1"
   }
 }

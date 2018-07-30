@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "scripts": ["app-a.js"],
+  "prefix":"/help",
   "styles": []
 }

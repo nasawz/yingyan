@@ -3,7 +3,6 @@ import { reasonableTime } from '../helper/timeouts';
 import StatusHelper from '../helper/status.helper';
 import { addAppToUnload, toUnloadPromise } from './unload';
 import { customEvent, find, yyLog } from '../helper/app.helper';
-// import { MooaApp } from '../model/IAppOption';
 
 declare const window: any;
 
