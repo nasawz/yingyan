@@ -9,6 +9,7 @@
 import { find } from './helper/app.helper';
 
 declare const history: History;
+declare let window: any;
 
 export class YingyanRouter {
   routes: string[];
@@ -35,6 +36,7 @@ export class YingyanRouter {
       } else {
         this.lastPathName = location.pathname;
         this.navigate(this.defaultRoute);
+        window.yingyan.instance.reRouter();
         return false;
       }
     };

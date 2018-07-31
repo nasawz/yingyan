@@ -30,9 +30,9 @@ class Yingyan {
    * 加载配置
    */
   bootstrap() {
-    axios.get('config.json').then(res => {
+    axios.get('config.json').then(async res => {
       // console.log(res.data);
-      this.registerApp(res.data.apps);
+      await this.registerApp(res.data.apps);
       this.start();
     });
   }
@@ -41,19 +41,21 @@ class Yingyan {
    * 注册应用
    */
   registerApp(data: Array<IApp>) {
-    map(data, app => {
-      window.yingyan[app.name] = window.yingyan[app.name] || {};
-      window.yingyan[app.name].prefix = app.prefix;
-      let container = document.createElement('div');
-      container.id = `${app.name}@${app.version}`;
-      document.body.appendChild(container);
-      app.status = StatusEnum.NOT_LOADED;
-      app.parentElement = container.id;
-      app.activeWhen = yingyanRouter.matchRoute(app.prefix, app.isDefaultPage);
-      apps.push(app);
-      console.log(app);
+    return new Promise((resolve, reject) => {
+      map(data, app => {
+        window.yingyan[app.name] = window.yingyan[app.name] || {};
+        window.yingyan[app.name].prefix = app.prefix;
+        let container = document.createElement('div');
+        container.id = `${app.name}@${app.version}`;
+        document.body.appendChild(container);
+        app.status = StatusEnum.NOT_LOADED;
+        app.parentElement = container.id;
+        app.activeWhen = yingyanRouter.matchRoute(app.prefix, app.isDefaultPage);
+        apps.push(app);
+      });
+      window.apps = apps;
+      resolve();
     });
-    window.apps = apps;
   }
 
   start() {

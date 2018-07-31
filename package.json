@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently --kill-others \"npm run build:watch\" \"ts-node server.ts\" --prefix \"[{name}]\" --names \"ROLLUP,SERVER\"",
-    "build:watch": "rollup -c rollup.config.js -w"
+    "start": "npx concurrently --kill-others \"npm run build:watch\" \"ts-node server.ts\" --prefix \"[{name}]\" --names \"ROLLUP,SERVER\"",
+    "build:watch": "npx rollup -c rollup.config.js -w"
   },
   "repository": {
     "type": "git",
