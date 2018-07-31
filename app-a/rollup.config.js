@@ -15,10 +15,6 @@ const options = {
   outputFolder: 'dist',
   bundlePath: `dist/${packageJSON.name}.js`,
   minifiedBundlePath: `dist/${packageJSON.name}.min.js`
-  // htmlTemplate: 'src/template.html',
-  // exportedEnvPrefix: 'WEBAPP_ENV_',
-  // webapp: process.env.WEBAPP === 'true',
-  // IS_WATCH_MODE: process.env.ROLLUP_WATCH === 'true'
 };
 
 const defaultPlugins = [
@@ -67,13 +63,13 @@ rollupConfig.push(
   })
 );
 
-// rollupConfig.push(
-//   createBundleConfig(options.minifiedBundlePath, {
-//     output: {
-//       banner: licenseText
-//     },
-//     plugins: [...defaultPlugins, uglify()]
-//   })
-// );
+rollupConfig.push(
+  createBundleConfig(options.minifiedBundlePath, {
+    output: {
+      banner: licenseText
+    },
+    plugins: [...defaultPlugins, uglify()]
+  })
+);
 
 export default rollupConfig;
