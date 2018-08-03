@@ -2,7 +2,8 @@ import { IApp } from './interface/IApp';
 import { StatusEnum, YY_EVENT } from './interface/constants';
 // import { load } from './loader/yingyan.loader';
 import axios from 'axios';
-import map from 'lodash/map';
+// import * as map from 'lodash.map';
+// const map = require('lodash.map');
 import StatusHelper from './helper/status.helper';
 import { YingyanRouter } from './router';
 import { yyLog, customEvent, navigateAppByName } from './helper/app.helper';
@@ -42,7 +43,7 @@ class Yingyan {
    */
   registerApp(data: Array<IApp>) {
     return new Promise((resolve, reject) => {
-      map(data, app => {
+      data.map((app: any) => {
         window.yingyan[app.name] = window.yingyan[app.name] || {};
         window.yingyan[app.name].prefix = app.prefix;
         let container = document.createElement('div');
