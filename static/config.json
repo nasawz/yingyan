@@ -12,6 +12,21 @@
       "scripts": ["app-a/dist/app-a.js"],
       "styles": [],
       "prefix": "/help",
+      "isDefaultPage": false
+    },
+    {
+      "name": "mobile_walk_power",
+      "version": "1.0.0",
+      "description": "",
+      "baseScriptUrl": "",
+      "parentElement": "",
+      "scripts": [
+        "app-b/react.development.js",
+        "app-b/react-dom.development.js",
+        "app-b/mobile_walk_power.js"
+      ],
+      "styles": [],
+      "prefix": "/walk_power",
       "isDefaultPage": true
     }
   ]

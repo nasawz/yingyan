@@ -15,12 +15,17 @@ class Home extends Component {
   clickHandle() {
     navigate({ name: config.name, prefix: config.prefix, router: '/clock' });
   }
+  walkHandle() {
+    navigate({ name: 'mobile_walk_power', prefix: '/walk_power', router: '' });
+  }
   render() {
     return (
       <div>
         My Home
         <p>
-          <button onClick={this.clickHandle.bind(this)}>click</button>
+          <button onClick={this.clickHandle.bind(this)}>clock</button>
+          <br />
+          <button onClick={this.walkHandle.bind(this)}>walk</button>
         </p>
       </div>
     );
@@ -68,8 +73,8 @@ class Conatiner extends Component<{}, { r: any }> {
       return (
         <div>
           <Router history={createHashHistory()}>
-            <Home path={window.yingyan[config.name].prefix} />
-            <Clock path={`${window.yingyan[config.name].prefix}/clock`} />
+            <Home path={window[config.name].prefix} />
+            <Clock path={`${window[config.name].prefix}/clock`} />
           </Router>
         </div>
       );
@@ -86,12 +91,12 @@ const clockStyle = cxs({
 });
 
 window.yingyan = window.yingyan || {};
-window.yingyan[config.name] = window.yingyan[config.name] || {};
-window.yingyan[config.name].prefix = window.yingyan[config.name].prefix || config.prefix;
+window[config.name] = window[config.name] || {};
+window[config.name].prefix = window[config.name].prefix || config.prefix;
 
 let routingChangeHandler: any = (event: CustomEvent) => {
   if (event.detail.app.name === config.name) {
-    route(`${window.yingyan[config.name].prefix}${event.detail.router}`, true);
+    route(`${window[config.name].prefix}${event.detail.router}`, true);
   }
 };
 
@@ -107,7 +112,7 @@ const unmount = (module: any) => {
   if (appInstance) {
     _conatiner.setState({ r: false });
     appInstance.parentNode.removeChild(appInstance);
-    window.yingyan[config.name] = undefined;
+    window[config.name] = undefined;
     customEvent(YY_EVENT.CHILD_UNMOUNT, { name: config.name });
     window.removeEventListener(YY_EVENT.ROUTING_CHANGE, routingChangeHandler);
   }

@@ -1,9 +1,6 @@
 import { IApp } from './interface/IApp';
 import { StatusEnum, YY_EVENT } from './interface/constants';
-// import { load } from './loader/yingyan.loader';
 import axios from 'axios';
-// import * as map from 'lodash.map';
-// const map = require('lodash.map');
 import StatusHelper from './helper/status.helper';
 import { YingyanRouter } from './router';
 import { yyLog, customEvent, navigateAppByName } from './helper/app.helper';
@@ -44,8 +41,9 @@ class Yingyan {
   registerApp(data: Array<IApp>) {
     return new Promise((resolve, reject) => {
       data.map((app: any) => {
-        window.yingyan[app.name] = window.yingyan[app.name] || {};
-        window.yingyan[app.name].prefix = app.prefix;
+        window[app.name] = window[app.name] || {};
+        window[app.name].prefix = app.prefix;
+        console.log(app.name, window[app.name]);
         let container = document.createElement('div');
         container.id = `${app.name}@${app.version}`;
         document.body.appendChild(container);
@@ -59,11 +57,25 @@ class Yingyan {
     });
   }
 
+  getPrefix(url: any) {
+    var patt = /#(\/\w*)/;
+    let match = patt.exec(url);
+    if (match && match.length > 1) {
+      return match[1];
+    }
+    return undefined;
+  }
   start() {
     this.started = true;
     window.addEventListener(YY_EVENT.ROUTING_NAVIGATE, function(event: CustomEvent) {
       if (event.detail) {
         navigateAppByName(event.detail);
+      }
+    });
+    window.addEventListener('hashchange', (e: any) => {
+      let { newURL, oldURL } = e;
+      if (this.getPrefix(newURL) != this.getPrefix(oldURL)) {
+        this.reRouter();
       }
     });
     this.reRouter();

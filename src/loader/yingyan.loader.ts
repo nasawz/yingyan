@@ -17,8 +17,8 @@ function mount(app: any, props?: any) {
   return new Promise((resolve, reject) => {
     let aliasWindow: any = window;
 
-    if (aliasWindow.yingyan[app.name]) {
-      aliasWindow.yingyan[app.name].mount(props);
+    if (aliasWindow[app.name]) {
+      aliasWindow[app.name].mount(props);
       resolve();
     } else {
       console.error(`Cannot mount ${app.name} because that is not bootstraped`);
@@ -30,8 +30,8 @@ function mount(app: any, props?: any) {
 function unmount(app: any, props: any) {
   const { unloadApplication, getAppNames } = props;
   return new Promise((resolve, reject) => {
-    if (window.yingyan[app.name]) {
-      window.yingyan[app.name].unmount();
+    if (window[app.name]) {
+      window[app.name].unmount();
       // removeApplicationContainer(app)
       if (getAppNames().indexOf(app.name) !== -1) {
         unloadApplication(app.name, { waitForUnmount: true });
