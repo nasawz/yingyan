@@ -12,7 +12,7 @@
       "scripts": ["app-a/dist/app-a.js"],
       "styles": [],
       "prefix": "/help",
-      "isDefaultPage": false
+      "isDefaultPage": true
     },
     {
       "name": "mobile_walk_power",
@@ -27,7 +27,7 @@
       ],
       "styles": [],
       "prefix": "/walk_power",
-      "isDefaultPage": true
+      "isDefaultPage": false
     }
   ]
 }
